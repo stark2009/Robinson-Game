@@ -1,46 +1,39 @@
+
 const socket = io();
-let board = [], mySymbol, myTurn = false;
 
 function join() {
-  const username = document.getElementById('username').value;
-  const room = document.getElementById('room').value;
-  socket.emit('joinRoom', { room, username });
-}
+  const username = document.getElementById('username').value.trim();
+  const room = document.getElementById('room').value.trim();
 
-socket.on('startGame', players => {
-  board = Array(9).fill('');
-  mySymbol = players[0] === document.getElementById('username').value ? 'X' : 'O';
-  myTurn = mySymbol === 'X';
+  if (!username || !room) {
+    alert('Veuillez saisir un pseudo et un code de partie.');
+    return;
+  }
+
+  socket.emit('joinRoom', { room, username });
+  
+  // Masquer la configuration, afficher le jeu
   document.getElementById('setup').style.display = 'none';
   document.getElementById('game').style.display = 'block';
-  document.getElementById('status').textContent = myTurn ? "Ton tour" : "Tour de l’adversaire";
-  drawBoard();
+}
+
+// Écoute les événements du serveur
+socket.on('roomFull', () => {
+  alert('Cette salle est pleine. Choisissez un autre code.');
+  document.getElementById('setup').style.display = 'block';
+  document.getElementById('game').style.display = 'none';
 });
 
-function drawBoard() {
-  const boardEl = document.getElementById('board');
-  boardEl.innerHTML = '';
-  board.forEach((v, i) => {
-    const cell = document.createElement('div');
-    cell.textContent = v;
-    cell.className = 'cell';
-    cell.onclick = () => play(i);
-    boardEl.appendChild(cell);
-  });
-}
+socket.on('startGame', players => {
+  document.getElementById('status').textContent = 'Joueurs : ' + players.join(' vs ');
+  // Ici tu peux initialiser le plateau, etc.
+});
 
-function play(i) {
-  if (!myTurn || board[i]) return;
-  board[i] = mySymbol;
-  drawBoard();
-  myTurn = false;
-  document.getElementById('status').textContent = "Tour de l’adversaire";
-  socket.emit('playTurn', { index: i, symbol: mySymbol });
-}
+socket.on('opponentPlayed', data => {
+  // Met à jour le jeu avec le coup de l’adversaire
+});
 
-socket.on('opponentPlayed', ({ index, symbol }) => {
-  board[index] = symbol;
-  drawBoard();
-  myTurn = true;
-  document.getElementById('status').textContent = "Ton tour";
+socket.on('opponentLeft', () => {
+  alert('Ton adversaire a quitté la partie.');
+  // Retour à l’écran d’accueil ou gestion autre
 });
