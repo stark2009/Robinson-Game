@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Tic-Tac-Toe Multi</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Tic-Tac-Toe</h1>
+  <div id="setup">
+    <input id="username" placeholder="Pseudo">
+    <input id="room" placeholder="Code de partie">
+    <button onclick="join()">Rejoindre / Créer</button>
+  </div>
+  <div id="game" style="display:none">
+    <h2 id="status">...</h2>
+    <div id="board"></div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
