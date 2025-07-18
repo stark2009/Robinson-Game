@@ -9,6 +9,11 @@ const rooms = {};
 
 app.use(express.static('public'));
 
+// Ajout de la route catch-all pour React, Vue, ou single page apps
+app.get('*', (req, res) => {
+  res.sendFile(__dirname + '/public/index.html');
+});
+
 io.on('connection', socket => {
   socket.on('joinRoom', ({ room, username }) => {
     if (!rooms[room]) rooms[room] = [];
@@ -29,3 +34,4 @@ io.on('connection', socket => {
 });
 
 http.listen(PORT, () => console.log(`Running on port ${PORT}`));
+
