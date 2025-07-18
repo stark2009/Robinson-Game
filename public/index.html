@@ -5,155 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Tic-Tac-Toe Multijoueur</title>
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #121212;
-      color: #eee;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      justify-content: center;
-    }
-    h1 {
-      margin-bottom: 20px;
-      font-size: 2.5rem;
-      color: #00d8ff;
-      text-shadow: 0 0 5px #00d8ff;
-    }
-    #setup, #game {
-      background: #1e1e1e;
-      padding: 20px 30px;
-      border-radius: 12px;
-      box-shadow: 0 0 15px rgba(0, 216, 255, 0.4);
-      width: 320px;
-      max-width: 90vw;
-    }
-    #setup input {
-      width: 100%;
-      padding: 12px 10px;
-      margin-bottom: 15px;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      outline: none;
-      background: #333;
-      color: #eee;
-      box-sizing: border-box;
-      transition: background 0.3s;
-    }
-    #setup input:focus {
-      background: #444;
-      box-shadow: 0 0 8px #00d8ff;
-    }
-    #setup button {
-      width: 100%;
-      padding: 12px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      background: #00d8ff;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      color: #121212;
-      box-shadow: 0 5px 15px rgba(0, 216, 255, 0.6);
-      transition: background 0.3s;
-    }
-    #setup button:hover {
-      background: #00b8e6;
-    }
-    #status {
-      margin-bottom: 20px;
-      font-size: 1.2rem;
-      text-align: center;
-      color: #00d8ff;
-      text-shadow: 0 0 5px #00d8ff;
-    }
-    #board {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: repeat(3, 1fr);
-      gap: 10px;
-      width: 100%;
-      height: 300px;
-    }
-    .cell {
-      background: #222;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 3rem;
-      color: #00d8ff;
-      cursor: pointer;
-      user-select: none;
-      transition: background 0.3s, color 0.3s;
-    }
-    .cell:hover {
-      background: #00b8e6;
-      color: #121212;
-    }
-    .cell.disabled {
-      cursor: default;
-      color: #555;
-      background: #111;
-    }
-    #game button {
-      margin-top: 20px;
-      width: 100%;
-      padding: 10px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 8px;
-      background: #ff3366;
-      color: #fff;
-      cursor: pointer;
-      box-shadow: 0 5px 15px rgba(255, 51, 102, 0.6);
-      transition: background 0.3s;
-    }
-    #game button:hover {
-      background: #e62e5c;
-    }
-    @media (max-width: 400px) {
-      #board {
-        height: 250px;
-      }
-      .cell {
-        font-size: 2.5rem;
-      }
-    }
+    body { font-family: Arial, sans-serif; background: #222; color: #eee; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+    #setup, #game { background: #333; padding: 20px; border-radius: 10px; width: 320px; text-align: center; }
+    input { width: 100%; padding: 10px; margin: 10px 0; border: none; border-radius: 5px; }
+    button { width: 100%; padding: 10px; background: #00d8ff; border: none; border-radius: 5px; color: #000; font-weight: bold; cursor: pointer; }
+    #board { display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: 5px; margin-top: 20px; }
+    .cell { background: #444; height: 80px; font-size: 3rem; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 5px; }
+    .cell.disabled { cursor: default; background: #222; }
   </style>
 </head>
 <body>
-  <h1>Tic-Tac-Toe Multijoueur</h1>
-
   <div id="setup">
-    <input id="username" type="text" placeholder="Ton pseudo" autocomplete="off" />
-    <input id="room" type="text" placeholder="Code de la partie" autocomplete="off" />
-    <button id="joinBtn">Rejoindre / Créer une partie</button>
+    <input id="username" placeholder="Pseudo" autocomplete="off" />
+    <input id="room" placeholder="Code de la partie" autocomplete="off" />
+    <button id="joinBtn">Rejoindre / Créer</button>
   </div>
 
   <div id="game" style="display:none;">
     <div id="status">En attente d'un adversaire...</div>
-    <div id="board">
-      <!-- 9 cases du jeu -->
-      <div class="cell" data-index="0"></div>
-      <div class="cell" data-index="1"></div>
-      <div class="cell" data-index="2"></div>
-      <div class="cell" data-index="3"></div>
-      <div class="cell" data-index="4"></div>
-      <div class="cell" data-index="5"></div>
-      <div class="cell" data-index="6"></div>
-      <div class="cell" data-index="7"></div>
-      <div class="cell" data-index="8"></div>
-    </div>
-    <button id="leaveBtn">Quitter la partie</button>
+    <div id="board"></div>
+    <button id="leaveBtn" style="margin-top:20px; background:#ff5555; color:#fff;">Quitter la partie</button>
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
   <script src="script.js"></script>
 </body>
-        </html>
-        
+</html>
